@@ -4,6 +4,7 @@ import ProductFilter from './Filter'
 import { useEffect,useState,useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from '../../store/ProductListSlice';
+import Navbar from './navber';
 
 export default function home() {
     const dispatch = useDispatch();
@@ -29,11 +30,11 @@ const filterproducts = useMemo(() =>{
   const lowercategory = filter.category.trim().toLocaleLowerCase()
 
 
-    if (!lowersearch && lowercategory === 'all' ){
+    if (!lowersearch && lowercategory === 'all' && filter.price === 'defaul' ){
       return list
     }
 
-     return list.filter((item) =>{
+     const filtered= list.filter((item) =>{
       const searchOk = !lowersearch || 
      ( item.title?.toLocaleLowerCase().includes(lowersearch) ?? false)
 
@@ -41,8 +42,15 @@ const filterproducts = useMemo(() =>{
      (  item.category?.toLocaleLowerCase()=== lowercategory ?? false)
        return searchOk && categoryOk
       })
- 
-}, [productlist,filter.category,filter.search])
+     const sorted = [...filtered]
+      if (filter.price === 'low-to-high'){
+        sorted.sort((a,b) => Number(a.price)-Number(b.price))
+      }
+      else if(filter.price === 'high-to-low'){
+         sorted.sort((a,b) => Number(b.price)-Number(a.price))
+      }
+      return sorted
+}, [productlist,filter.category,filter.search,filter.price])
 
 
   useEffect(() => {
@@ -50,6 +58,7 @@ const filterproducts = useMemo(() =>{
   }, [dispatch]);
   return (
     <>
+    <Navbar/>
     <ProductFilter  datafilter={datafilter} filter={filter}/>
     <ProductCard  productlist={filterproducts} loading={loading} error={error}/>
     </>
