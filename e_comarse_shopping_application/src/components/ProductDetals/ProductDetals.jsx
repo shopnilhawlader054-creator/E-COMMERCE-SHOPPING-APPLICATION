@@ -4,15 +4,17 @@ import { Link, useParams } from 'react-router-dom';
 import { fetchProducts } from '../../store/ProductListSlice';
 import { useEffect,useState } from 'react';
 import { useCart } from '../CartApiContext';
+import ShowAddtoCartSucessMsg from '../HomePage/ShowAddtoCartSucessMsg.jsx'
+import Navbar from '../HomePage/navber.jsx';
 
 export default function ProductsDetals() {
    const dispatch = useDispatch();
   const {id} = useParams()
   const numericId = Number(id)
-  const [qty,setQty] = useState(0)
+  const [qty,setQty] = useState(1)
     const { productlist,loading}= useSelector((state) => state.PruductLists)
     const productfind = productlist.find((item) => item.id === numericId)
-     const {addcartitem,removesuccesmsg,showmsg} = useCart()
+     const {addcartitem,showmsg} = useCart()
 
       useEffect(() => {
         if(!productlist.length){
@@ -20,8 +22,8 @@ export default function ProductsDetals() {
       }, [dispatch,productlist]);
 
 function addtocartbtn(event){
-  
- addcartitem(qty,productfind)
+  event.preventDefault();
+ addcartitem(productfind,qty)
 }
 
 
@@ -48,10 +50,13 @@ if (!productfind){
 }
   return (
     <>
+     
+   <Navbar/>
+ 
     <section className="min-h-screen bg-[#0b0c10] px-4 py-10 text-zinc-100 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
         {/* Top Back Link */}
-        <div className="mb-6">
+        <div className="mb-6 flex justify-between h-12">
           <Link
             to="/"
             className="inline-flex items-center gap-2 rounded-xl border border-zinc-800 bg-[#121212] px-3.5 py-2 text-xs font-medium text-zinc-300 transition-colors hover:border-amber-400/40 hover:text-amber-300"
@@ -59,6 +64,7 @@ if (!productfind){
             <span>←</span>
             <span>Back to Products</span>
           </Link>
+           {showmsg.success && <ShowAddtoCartSucessMsg/>}
         </div>
 
         {/* Main Details Card */}

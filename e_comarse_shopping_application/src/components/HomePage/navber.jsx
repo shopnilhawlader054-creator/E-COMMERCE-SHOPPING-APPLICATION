@@ -3,7 +3,7 @@ import { useCart } from "../CartApiContext";
 
 export default function Navbar() {
   const { cartitem } = useCart();
-  const totalItems = cartitem.reduce((sum, item) => sum + item.qty, 0);
+  const totalItems = cartitem.length
 
   return (
     <nav className="bg-[#0b0c10] text-gray-100 border-b border-gray-800 px-6 py-4">

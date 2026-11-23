@@ -32,13 +32,21 @@ setShowMsg((pev) => ({...pev,loading:false,success:true}))
 }
 
 
+function dleteaddtocartdata(product){
+   setCartItem((pev) =>{
+    const newdaddtocart = pev.filter((item) => item.id !== product.id) 
+    return newdaddtocart
+   })
+}
+
+
 function removesuccesmsg(){
-    setShowMsg({...showmsg,succes:false})
+    setShowMsg({...showmsg,success:false})
 }
 
 
 return(
-    <CartContext.Provider value={{cartitem,showmsg,removesuccesmsg,addcartitem}}>
+    <CartContext.Provider value={{cartitem,showmsg,removesuccesmsg,addcartitem,dleteaddtocartdata}}>
         {children}
     </CartContext.Provider>
 )
