@@ -44,9 +44,28 @@ function removesuccesmsg(){
     setShowMsg({...showmsg,success:false})
 }
 
+ function incrementQty(id){
+    setCartItem((prev) =>{
+      const newlist = prev.map((item) => item.id === id 
+      ?{...item ,qty:(item.qty ||1) + 1}
+      : item
+    )
+    return newlist
+    })
+ }
 
+function decrementQty (id) {
+    setCartItem((prev) =>{
+      const newlist = prev.map((item) => item.id === id && item.qty > 0
+      ?{...item ,qty:item.qty - 1}
+      : item
+    )
+    return newlist
+    })
+
+ }
 return(
-    <CartContext.Provider value={{cartitem,showmsg,removesuccesmsg,addcartitem,dleteaddtocartdata}}>
+    <CartContext.Provider value={{cartitem,showmsg,removesuccesmsg,addcartitem,dleteaddtocartdata,incrementQty,decrementQty}}>
         {children}
     </CartContext.Provider>
 )
